@@ -1,0 +1,36 @@
+services:
+  game:
+    image: ghcr.io/ds-mrtq/crystal-kingdom-defenders:latest
+    container_name: ckd-prod
+    ports:
+      - "80:8080"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    # Drop all capabilities, only re-add what nginx needs to bind & switch user
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - NET_BIND_SERVICE
+    # Resource limits (tweak as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          memory: 32M

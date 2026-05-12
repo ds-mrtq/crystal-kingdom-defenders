@@ -1,0 +1,16 @@
+services:
+  game:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: crystal-kingdom-defenders:dev
+    container_name: ckd-dev
+    ports:
+      - "8090:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
