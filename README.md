@@ -6,6 +6,18 @@
 ![Phaser](https://img.shields.io/badge/Phaser-3.80-8E44AD?logo=phaser)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
+[![Deploy to Pages](https://github.com/ds-mrtq/crystal-kingdom-defenders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ds-mrtq/crystal-kingdom-defenders/actions/workflows/deploy-pages.yml)
+[![Docker GHCR](https://github.com/ds-mrtq/crystal-kingdom-defenders/actions/workflows/docker-ghcr.yml/badge.svg)](https://github.com/ds-mrtq/crystal-kingdom-defenders/actions/workflows/docker-ghcr.yml)
+
+## 🎮 Chơi Ngay
+
+> **🌐 [https://ds-mrtq.github.io/crystal-kingdom-defenders/](https://ds-mrtq.github.io/crystal-kingdom-defenders/)**
+
+Hoặc kéo Docker image:
+```bash
+docker run --rm -p 8080:8080 ghcr.io/ds-mrtq/crystal-kingdom-defenders:latest
+# Mở http://localhost:8080/
+```
 
 ---
 
@@ -122,10 +134,34 @@ Dự án này được phát triển bằng **Agentic Vibe Coding** (Claude Code
 5. ✅ **Phase 5: Test Execution** — 104/123 PASS, 0 FAIL
 6. 🔁 **Phase 6: Iterate** — Sẵn sàng nhận feedback
 
+## 🐳 Docker Deployment
+
+```bash
+# Build local
+docker build -t crystal-kingdom-defenders .
+
+# Chạy dev
+docker-compose up -d
+# Mở http://localhost:8090/
+
+# Chạy prod (image từ GHCR, hardened)
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+Hoặc kéo image đã build từ GHCR (multi-arch amd64+arm64):
+```bash
+docker pull ghcr.io/ds-mrtq/crystal-kingdom-defenders:latest
+```
+
+## 🚀 CI/CD
+
+- **[Deploy to GitHub Pages](.github/workflows/deploy-pages.yml)** — auto deploy `dist/` lên Pages mỗi khi push `main`
+- **[Build & Push Docker GHCR](.github/workflows/docker-ghcr.yml)** — multi-arch image + SLSA provenance attestation
+
 ## 📝 License
 
 MIT — tự do dùng, sửa, học hỏi.
 
 ---
 
-🤖 *Được phát triển bằng [Claude Code](https://claude.com/claude-code) với vibe-builder skill.*
+🤖 *Được phát triển bằng [Claude Code](https://claude.com/claude-code) với vibe-builder + vibe-deployer skill.*
