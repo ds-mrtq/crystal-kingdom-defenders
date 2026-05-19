@@ -37,10 +37,11 @@ export class SpriteFactory {
   // ---------------- Princess Lumi ----------------
   private static generatePrincess(scene: Phaser.Scene): void {
     const size = 96;
-    const pad = 8;
-    const canvas = makeCanvas(size, size * 1.4 + pad);
+    const padX = 24;
+    const padY = 8;
+    const canvas = makeCanvas(size + padX, size * 1.4 + padY);
     const ctx = canvas.getContext('2d')!;
-    ctx.translate(0, pad);
+    ctx.translate(padX / 2, padY);
     const cx = size / 2;
 
     // body (peach dress with star)
@@ -880,9 +881,9 @@ export class SpriteFactory {
   private static generateUI(scene: Phaser.Scene): void {
     // Heart icon
     {
-      const canvas = makeCanvas(28, 28);
+      const canvas = makeCanvas(32, 34);
       const ctx = canvas.getContext('2d')!;
-      drawHeart(ctx, 14, 8, 28, 0xef5350, 0xb71c1c);
+      drawHeart(ctx, 16, 3, 28, 0xef5350, 0xb71c1c);
       SpriteFactory.registerCanvas(scene, 'ui_heart', canvas);
     }
     // Coin
