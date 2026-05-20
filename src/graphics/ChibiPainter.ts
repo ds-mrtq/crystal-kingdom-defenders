@@ -91,12 +91,12 @@ export function drawChibiHead(ctx: CanvasRenderingContext2D, opt: ChibiHeadOptio
   ctx.fill();
   ctx.stroke();
 
-  // shading on bottom-right
+  // subtle shading on lower-right cheek
   ctx.save();
-  ctx.globalAlpha = 0.18;
+  ctx.globalAlpha = 0.08;
   ctx.fillStyle = hexStr(darken(bodyColor, 0.6));
   ctx.beginPath();
-  ctx.ellipse(cx + radius * 0.2, cy + radius * 0.25, radius * 0.7, radius * 0.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(cx + radius * 0.3, cy + radius * 0.45, radius * 0.45, radius * 0.35, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 

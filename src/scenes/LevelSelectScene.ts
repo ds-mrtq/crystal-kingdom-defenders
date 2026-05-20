@@ -3,6 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT, COLORS } from '../config/GameConfig';
 import { LEVELS } from '../config/LevelConfig';
 import { SaveSystem } from '../save/SaveSystem';
 import { AudioSystem } from '../audio/AudioSystem';
+import { I18n } from '../i18n/I18n';
 
 export class LevelSelectScene extends Phaser.Scene {
   private selectedLevel = 1;
@@ -20,7 +21,7 @@ export class LevelSelectScene extends Phaser.Scene {
 
     // Header
     this.add
-      .text(GAME_WIDTH / 2, 60, '✦ Crystal Kingdom Map ✦', {
+      .text(GAME_WIDTH / 2, 60, I18n.get().t().levelSelect.title, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '40px',
         color: '#4A148C',
@@ -33,7 +34,7 @@ export class LevelSelectScene extends Phaser.Scene {
       .setScale(0.5, 0.7)
       .setInteractive({ useHandCursor: true });
     this.add
-      .text(80, 60, '← Back', {
+      .text(80, 60, I18n.get().t().levelSelect.back, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '20px',
         color: '#4A148C',
@@ -83,7 +84,7 @@ export class LevelSelectScene extends Phaser.Scene {
       .image(GAME_WIDTH / 2, GAME_HEIGHT - 60, 'ui_button')
       .setInteractive({ useHandCursor: true });
     this.startBtnText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 60, '▶ START LEVEL', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT - 60, I18n.get().t().levelSelect.startLevel, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '24px',
         color: '#4A148C',
@@ -153,7 +154,7 @@ export class LevelSelectScene extends Phaser.Scene {
       node.setInteractive({ useHandCursor: unlocked });
 
       const label = this.add
-        .text(pos.x, pos.y - 56, lvl.name, {
+        .text(pos.x, pos.y - 56, I18n.get().level(lvl.id).name, {
           fontFamily: 'Fredoka, sans-serif',
           fontSize: '16px',
           color: '#4A148C',
@@ -226,15 +227,17 @@ export class LevelSelectScene extends Phaser.Scene {
     if (!lvl) return;
     const save = SaveSystem.get();
     const unlocked = save.isLevelUnlocked(id);
-    this.detailTitle.setText(`Lv ${lvl.id}: ${lvl.name}`);
+    const ll = I18n.get().level(lvl.id);
+    const lt = I18n.get().t().levelSelect;
+    this.detailTitle.setText(`Lv ${lvl.id}: ${ll.name}`);
     if (unlocked) {
-      this.detailText.setText(lvl.storyIntro[0] ?? '');
-      this.startBtnText.setText('▶ START LEVEL');
+      this.detailText.setText(ll.storyIntro[0] ?? '');
+      this.startBtnText.setText(lt.startLevel);
       this.startBtn.setAlpha(1);
       this.startBtn.setInteractive();
     } else {
-      this.detailText.setText('Level locked. Beat previous level to unlock.');
-      this.startBtnText.setText('🔒 LOCKED');
+      this.detailText.setText(lt.locked);
+      this.startBtnText.setText(lt.lockedBtn);
       this.startBtn.setAlpha(0.5);
       this.startBtn.disableInteractive();
     }

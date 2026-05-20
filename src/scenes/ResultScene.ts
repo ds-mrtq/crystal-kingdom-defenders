@@ -4,6 +4,7 @@ import { LEVELS } from '../config/LevelConfig';
 import { SaveSystem } from '../save/SaveSystem';
 import { AudioSystem } from '../audio/AudioSystem';
 import type { LevelResult } from '../types';
+import { I18n } from '../i18n/I18n';
 
 export class ResultScene extends Phaser.Scene {
   private result!: LevelResult;
@@ -38,7 +39,8 @@ export class ResultScene extends Phaser.Scene {
     }
 
     // Title
-    const titleText = this.result.victory ? '✨ VICTORY ✨' : '☠ DEFEAT ☠';
+    const rt = I18n.get().t().result;
+    const titleText = this.result.victory ? rt.victory : rt.defeat;
     const title = this.add
       .text(GAME_WIDTH / 2, 140, titleText, {
         fontFamily: 'Fredoka, sans-serif',
@@ -51,9 +53,9 @@ export class ResultScene extends Phaser.Scene {
     this.tweens.add({ targets: title, scale: 1.05, yoyo: true, duration: 800, repeat: -1 });
 
     // Level name
-    const lvl = LEVELS.find((l) => l.id === this.result.levelId);
+    const ll = I18n.get().level(this.result.levelId);
     this.add
-      .text(GAME_WIDTH / 2, 220, `Lv ${this.result.levelId}: ${lvl?.name ?? ''}`, {
+      .text(GAME_WIDTH / 2, 220, `Lv ${this.result.levelId}: ${ll.name}`, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '28px',
         color: this.result.victory ? '#7B1FA2' : '#FFCCBC',
@@ -83,7 +85,7 @@ export class ResultScene extends Phaser.Scene {
     }
 
     // Stats
-    const lifeText = `Lives: ${this.result.remainingLives} / ${this.result.startLives}`;
+    const lifeText = `${rt.lives}: ${this.result.remainingLives} / ${this.result.startLives}`;
     this.add
       .text(GAME_WIDTH / 2, 420, lifeText, {
         fontFamily: 'Press Start 2P, monospace',
@@ -98,21 +100,21 @@ export class ResultScene extends Phaser.Scene {
       // Continue to next level (if exists & unlocked) OR back to map
       const nextLevel = LEVELS.find((l) => l.id === this.result.levelId + 1);
       if (nextLevel) {
-        this.makeButton(GAME_WIDTH / 2 - 140, btnY, '→ Next Level', () => {
+        this.makeButton(GAME_WIDTH / 2 - 140, btnY, rt.nextLevel, () => {
           AudioSystem.get().play('click');
           this.scene.start('StoryScene', { levelId: nextLevel.id, phase: 'intro' });
         });
       }
-      this.makeButton(GAME_WIDTH / 2 + 140, btnY, '🗺 World Map', () => {
+      this.makeButton(GAME_WIDTH / 2 + 140, btnY, rt.worldMap, () => {
         AudioSystem.get().play('click');
         this.scene.start('StoryScene', { levelId: this.result.levelId, phase: 'outro' });
       });
     } else {
-      this.makeButton(GAME_WIDTH / 2 - 140, btnY, '↻ Retry', () => {
+      this.makeButton(GAME_WIDTH / 2 - 140, btnY, rt.retry, () => {
         AudioSystem.get().play('click');
         this.scene.start('GameScene', { levelId: this.result.levelId });
       });
-      this.makeButton(GAME_WIDTH / 2 + 140, btnY, '🗺 World Map', () => {
+      this.makeButton(GAME_WIDTH / 2 + 140, btnY, rt.worldMap, () => {
         AudioSystem.get().play('click');
         this.scene.start('LevelSelectScene');
       });

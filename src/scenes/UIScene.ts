@@ -5,6 +5,7 @@ import type { GameScene } from './GameScene';
 import type { Tower } from '../entities/Tower';
 import type { TowerKind, BuildSpot } from '../types';
 import { AudioSystem } from '../audio/AudioSystem';
+import { I18n } from '../i18n/I18n';
 
 interface UISceneData {
   game: GameScene;
@@ -67,7 +68,7 @@ export class UIScene extends Phaser.Scene {
     // Wave
     this.add.image(320, 28, 'ui_wave').setDepth(101);
     this.waveText = this.add
-      .text(346, 28, 'Wave 0/0', {
+      .text(346, 28, `${I18n.get().t().ui.wave} 0/0`, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '22px',
         color: '#4A148C',
@@ -98,7 +99,7 @@ export class UIScene extends Phaser.Scene {
 
     // Pause
     this.pauseText = this.add
-      .text(GAME_WIDTH - 90, 28, '⏸  Pause', {
+      .text(GAME_WIDTH - 90, 28, I18n.get().t().ui.pause, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '20px',
         color: '#4A148C',
@@ -146,7 +147,7 @@ export class UIScene extends Phaser.Scene {
     this.sendBtn = this.add.container(140, barY + 28).setDepth(101);
     const sendBg = this.add.image(0, 0, 'ui_button').setScale(0.95, 0.7);
     this.sendBtnLabel = this.add
-      .text(0, 0, '▶ Send Wave', {
+      .text(0, 0, I18n.get().t().ui.sendWave, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '20px',
         color: '#4A148C',
@@ -167,7 +168,7 @@ export class UIScene extends Phaser.Scene {
     const mBg = this.add.image(0, 0, 'ui_button').setScale(0.7, 0.7);
     const mIcon = this.add.image(-32, 0, 'ui_meteor').setScale(0.7);
     const mLabel = this.add
-      .text(8, 0, 'Meteor', {
+      .text(8, 0, I18n.get().t().ui.meteor, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '18px',
         color: '#4A148C',
@@ -192,7 +193,7 @@ export class UIScene extends Phaser.Scene {
     const hBg = this.add.image(0, 0, 'ui_button').setScale(0.5, 0.7);
     const hIcon = this.add.image(-22, 0, 'ui_heal').setScale(0.7);
     const hLabel = this.add
-      .text(12, 0, 'Heal', {
+      .text(12, 0, I18n.get().t().ui.heal, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '16px',
         color: '#4A148C',
@@ -227,7 +228,7 @@ export class UIScene extends Phaser.Scene {
     this.goldText.setText(`${this.gameScene.getGold()}`);
     this.livesText.setText(`${this.gameScene.getLives()}`);
     const w = this.gameScene.getWaveInfo();
-    this.waveText.setText(`Wave ${Math.max(1, w.current)}/${w.total}`);
+    this.waveText.setText(`${I18n.get().t().ui.wave} ${Math.max(1, w.current)}/${w.total}`);
 
     // speed text highlight
     const sp = this.gameScene.getSpeedMultiplier();
@@ -236,18 +237,19 @@ export class UIScene extends Phaser.Scene {
       t.setColor(s === sp ? '#4A148C' : '#9E9E9E');
       t.setBackgroundColor(s === sp ? '#FFF59D' : 'transparent');
     });
-    this.pauseText.setText(this.gameScene.isPaused() ? '▶ Resume' : '⏸ Pause');
+    const ut = I18n.get().t().ui;
+    this.pauseText.setText(this.gameScene.isPaused() ? ut.resume : ut.pause);
 
     // send button state
     if (w.ready) {
       this.sendBtn.setAlpha(1);
-      this.sendBtnLabel.setText(`▶ Send Wave ${w.current + 1}`);
+      this.sendBtnLabel.setText(`${ut.sendWave} ${w.current + 1}`);
     } else if (w.spawning) {
       this.sendBtn.setAlpha(0.5);
-      this.sendBtnLabel.setText(`Wave ${w.current} active...`);
+      this.sendBtnLabel.setText(`${ut.wave} ${w.current} ${ut.waveActive}`);
     } else {
       this.sendBtn.setAlpha(0.5);
-      this.sendBtnLabel.setText(`Wave ${w.current}/${w.total}`);
+      this.sendBtnLabel.setText(`${ut.wave} ${w.current}/${w.total}`);
     }
 
     // ability cooldowns
@@ -285,7 +287,7 @@ export class UIScene extends Phaser.Scene {
     const panel = this.add.image(px, py, 'ui_panel').setScale(1.2, 0.95);
     panel.setDepth(151);
     const title = this.add
-      .text(px, py - 130, 'Build Tower', {
+      .text(px, py - 130, I18n.get().t().ui.buildTower, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '24px',
         color: '#4A148C',
@@ -326,7 +328,7 @@ export class UIScene extends Phaser.Scene {
         .setDepth(153);
 
       const nameText = this.add
-        .text(cardX, cardY + 52, def.name.split(' ').slice(0, 2).join(' '), {
+        .text(cardX, cardY + 52, I18n.get().tower(kind).name.split(' ').slice(0, 2).join(' '), {
           fontFamily: 'Quicksand, sans-serif',
           fontSize: '11px',
           color: '#4A148C',
@@ -365,7 +367,7 @@ export class UIScene extends Phaser.Scene {
     });
 
     const closeBtn = this.add
-      .text(px, py + 130, '✕ Cancel', {
+      .text(px, py + 130, I18n.get().t().ui.cancel, {
         fontFamily: 'Quicksand, sans-serif',
         fontSize: '16px',
         color: '#B71C1C',
@@ -402,7 +404,7 @@ export class UIScene extends Phaser.Scene {
 
     const def = TOWER_DEFS[tower.kind];
     const titleText = this.add
-      .text(px, py - 110, `${def.name}`, {
+      .text(px, py - 110, I18n.get().tower(tower.kind).name, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '20px',
         color: '#4A148C',
@@ -413,7 +415,7 @@ export class UIScene extends Phaser.Scene {
       .setDepth(152);
 
     const tierText = this.add
-      .text(px, py - 78, `Tier ${tower.tier} / ${def.tiers.length}`, {
+      .text(px, py - 78, `${I18n.get().t().ui.tier} ${tower.tier} / ${def.tiers.length}`, {
         fontFamily: 'Press Start 2P, monospace',
         fontSize: '12px',
         color: '#7B1FA2',
@@ -444,7 +446,7 @@ export class UIScene extends Phaser.Scene {
     if (upgradeCost !== null) {
       const canAfford = this.gameScene.getGold() >= upgradeCost;
       const upBtn = this.add
-        .text(px - 60, py + 60, canAfford ? `⬆ Upgrade  💰${upgradeCost}` : `⬆ ${upgradeCost}`, {
+        .text(px - 60, py + 60, canAfford ? `${I18n.get().t().ui.upgrade}  💰${upgradeCost}` : `⬆ ${upgradeCost}`, {
           fontFamily: 'Fredoka, sans-serif',
           fontSize: '16px',
           color: canAfford ? '#1B5E20' : '#9E9E9E',
@@ -464,7 +466,7 @@ export class UIScene extends Phaser.Scene {
       this.upgradeGroup.push(upBtn);
     } else {
       const maxTxt = this.add
-        .text(px - 60, py + 60, '⭐ MAX TIER', {
+        .text(px - 60, py + 60, I18n.get().t().ui.maxTier, {
           fontFamily: 'Fredoka, sans-serif',
           fontSize: '16px',
           color: '#FBC02D',
@@ -478,7 +480,7 @@ export class UIScene extends Phaser.Scene {
 
     const sellValue = tower.getSellValue();
     const sellBtn = this.add
-      .text(px + 60, py + 60, `Sell  💰${sellValue}`, {
+      .text(px + 60, py + 60, `${I18n.get().t().ui.sell}  💰${sellValue}`, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '16px',
         color: '#B71C1C',
@@ -494,7 +496,7 @@ export class UIScene extends Phaser.Scene {
     });
 
     const closeBtn = this.add
-      .text(px, py + 110, '✕ Close', {
+      .text(px, py + 110, I18n.get().t().ui.close, {
         fontFamily: 'Quicksand, sans-serif',
         fontSize: '14px',
         color: '#B71C1C',
