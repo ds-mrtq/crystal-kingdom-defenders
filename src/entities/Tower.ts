@@ -49,7 +49,7 @@ export class Tower {
     this.stats = TOWER_DEFS[kind].tiers[0];
 
     this.sprite = scene.add.image(position.x, position.y, `tower_${kind}_${this.tier}`);
-    this.sprite.setOrigin(0.5, 0.85);
+    this.sprite.setOrigin(0.5, 0.875);
     this.sprite.setDepth(40);
 
     // pop-in animation

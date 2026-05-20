@@ -37,8 +37,11 @@ export class SpriteFactory {
   // ---------------- Princess Lumi ----------------
   private static generatePrincess(scene: Phaser.Scene): void {
     const size = 96;
-    const canvas = makeCanvas(size, size * 1.4);
+    const padX = 24;
+    const padY = 8;
+    const canvas = makeCanvas(size + padX, size * 1.4 + padY);
     const ctx = canvas.getContext('2d')!;
+    ctx.translate(padX / 2, padY);
     const cx = size / 2;
 
     // body (peach dress with star)
@@ -176,8 +179,10 @@ export class SpriteFactory {
   private static makeArcherTower(scene: Phaser.Scene): void {
     for (let tier = 1; tier <= 3; tier++) {
       const size = 96;
-      const canvas = makeCanvas(size, size);
+      const pad = 16;
+      const canvas = makeCanvas(size, size + pad);
       const ctx = canvas.getContext('2d')!;
+      ctx.translate(0, pad);
       const cx = size / 2;
       const by = size - 8;
 
@@ -236,8 +241,10 @@ export class SpriteFactory {
   private static makeMageTower(scene: Phaser.Scene): void {
     for (let tier = 1; tier <= 3; tier++) {
       const size = 96;
-      const canvas = makeCanvas(size, size);
+      const pad = 16;
+      const canvas = makeCanvas(size, size + pad);
       const ctx = canvas.getContext('2d')!;
+      ctx.translate(0, pad);
       const cx = size / 2;
       const by = size - 8;
 
@@ -302,8 +309,10 @@ export class SpriteFactory {
   private static makeCannonTower(scene: Phaser.Scene): void {
     for (let tier = 1; tier <= 3; tier++) {
       const size = 96;
-      const canvas = makeCanvas(size, size);
+      const pad = 16;
+      const canvas = makeCanvas(size, size + pad);
       const ctx = canvas.getContext('2d')!;
+      ctx.translate(0, pad);
       const cx = size / 2;
       const by = size - 8;
 
@@ -365,8 +374,10 @@ export class SpriteFactory {
   private static makeFrostTower(scene: Phaser.Scene): void {
     for (let tier = 1; tier <= 3; tier++) {
       const size = 96;
-      const canvas = makeCanvas(size, size);
+      const pad = 16;
+      const canvas = makeCanvas(size, size + pad);
       const ctx = canvas.getContext('2d')!;
+      ctx.translate(0, pad);
       const cx = size / 2;
       const by = size - 8;
 
@@ -870,9 +881,9 @@ export class SpriteFactory {
   private static generateUI(scene: Phaser.Scene): void {
     // Heart icon
     {
-      const canvas = makeCanvas(28, 28);
+      const canvas = makeCanvas(32, 34);
       const ctx = canvas.getContext('2d')!;
-      drawHeart(ctx, 14, 8, 28, 0xef5350, 0xb71c1c);
+      drawHeart(ctx, 16, 3, 28, 0xef5350, 0xb71c1c);
       SpriteFactory.registerCanvas(scene, 'ui_heart', canvas);
     }
     // Coin
