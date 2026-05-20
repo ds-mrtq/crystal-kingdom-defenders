@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, COLORS } from '../config/GameConfig';
 import { LEVELS } from '../config/LevelConfig';
 import { AudioSystem } from '../audio/AudioSystem';
+import { I18n } from '../i18n/I18n';
 
 interface StoryData {
   levelId: number;
@@ -28,7 +29,8 @@ export class StoryScene extends Phaser.Scene {
       this.dialogues = [];
       return;
     }
-    this.dialogues = this.phase === 'intro' ? lvl.storyIntro : lvl.storyOutro;
+    const ll = I18n.get().level(this.levelId);
+    this.dialogues = this.phase === 'intro' ? ll.storyIntro : ll.storyOutro;
     this.current = 0;
   }
 
@@ -75,10 +77,11 @@ export class StoryScene extends Phaser.Scene {
     box.strokeRoundedRect(60, boxY, GAME_WIDTH - 120, 180, 16);
 
     // Title
+    const ll = I18n.get().level(this.levelId);
     const titleStr =
       this.phase === 'intro'
-        ? `Lv ${this.levelId}: ${lvl?.name ?? ''}`
-        : `Lv ${this.levelId}: Victory`;
+        ? `Lv ${this.levelId}: ${ll.name}`
+        : `Lv ${this.levelId}: ${I18n.get().t().story.victory}`;
     this.add
       .text(GAME_WIDTH / 2, boxY - 30, titleStr, {
         fontFamily: 'Fredoka, sans-serif',
@@ -100,7 +103,7 @@ export class StoryScene extends Phaser.Scene {
       .setOrigin(0, 0);
 
     this.continueText = this.add
-      .text(GAME_WIDTH - 90, boxY + 150, '▼ Click to continue', {
+      .text(GAME_WIDTH - 90, boxY + 150, I18n.get().t().story.continue, {
         fontFamily: 'Quicksand, sans-serif',
         fontSize: '14px',
         color: '#7B1FA2',
@@ -116,7 +119,7 @@ export class StoryScene extends Phaser.Scene {
 
     // Skip button
     const skipBtn = this.add
-      .text(GAME_WIDTH - 30, 30, 'Skip ⏭', {
+      .text(GAME_WIDTH - 30, 30, I18n.get().t().story.skip, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '20px',
         color: '#7B1FA2',

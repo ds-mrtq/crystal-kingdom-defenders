@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, COLORS } from '../config/GameConfig';
 import { SaveSystem } from '../save/SaveSystem';
 import { AudioSystem } from '../audio/AudioSystem';
+import { I18n } from '../i18n/I18n';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -15,8 +16,9 @@ export class MenuScene extends Phaser.Scene {
     this.spawnSparkles();
 
     // Title
+    const tt = I18n.get().t();
     const title = this.add
-      .text(GAME_WIDTH / 2, 110, 'Crystal Kingdom', {
+      .text(GAME_WIDTH / 2, 110, tt.menu.title, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '76px',
         color: '#4A148C',
@@ -26,7 +28,7 @@ export class MenuScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setShadow(0, 6, 'rgba(74,20,140,0.35)', 8, false, true);
     const subtitle = this.add
-      .text(GAME_WIDTH / 2, 184, 'D E F E N D E R S', {
+      .text(GAME_WIDTH / 2, 184, tt.menu.subtitle, {
         fontFamily: 'Press Start 2P, monospace',
         fontSize: '24px',
         color: '#7B1FA2',
@@ -64,15 +66,15 @@ export class MenuScene extends Phaser.Scene {
     // Buttons
     const buttonY = 540;
     const gap = 80;
-    this.makeButton(GAME_WIDTH / 2, buttonY, '▶  PLAY', () => this.startGame());
-    this.makeButton(GAME_WIDTH / 2, buttonY + gap, '⭐  Level Select', () =>
+    this.makeButton(GAME_WIDTH / 2, buttonY, tt.menu.play, () => this.startGame());
+    this.makeButton(GAME_WIDTH / 2, buttonY + gap, tt.menu.levelSelect, () =>
       this.scene.start('LevelSelectScene'),
     );
-    this.makeButton(GAME_WIDTH / 2, buttonY + gap * 2, '⚙   Settings', () => this.openSettings());
+    this.makeButton(GAME_WIDTH / 2, buttonY + gap * 2, tt.menu.settings, () => this.openSettings());
 
     // version
     this.add
-      .text(GAME_WIDTH - 16, GAME_HEIGHT - 16, 'v1.0  © Crystal Kingdom Studios', {
+      .text(GAME_WIDTH - 16, GAME_HEIGHT - 16, tt.menu.copyright, {
         fontFamily: 'Quicksand, sans-serif',
         fontSize: '14px',
         color: '#4A148C',
@@ -163,8 +165,9 @@ export class MenuScene extends Phaser.Scene {
     overlay.setInteractive();
     const panel = this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'ui_panel').setScale(1.4, 1.0);
 
+    const st = I18n.get().t();
     const title = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 110, 'Settings', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 110, st.settings.title, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '36px',
         color: '#4A148C',
@@ -174,28 +177,45 @@ export class MenuScene extends Phaser.Scene {
     const save = SaveSystem.get();
     const audio = AudioSystem.get();
 
-    let muteText: Phaser.GameObjects.Text;
-    const muteBtn = this.add
-      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 30, 'ui_button')
+    // Language toggle
+    const langBtn = this.add
+      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 70, 'ui_button')
       .setInteractive({ useHandCursor: true });
-    muteText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 30, audio.isMuted() ? '🔇 Sound: OFF' : '🔊 Sound: ON', {
+    const langText = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 70, st.settings.langLabel, {
+        fontFamily: 'Fredoka, sans-serif',
+        fontSize: '24px',
+        color: '#4A148C',
+      })
+      .setOrigin(0.5);
+    langBtn.on('pointerdown', () => {
+      AudioSystem.get().play('click');
+      I18n.get().toggle();
+      this.scene.restart();
+    });
+
+    const muteBtn = this.add
+      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 10, 'ui_button')
+      .setInteractive({ useHandCursor: true });
+    const muteText = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 10, audio.isMuted() ? st.settings.soundOff : st.settings.soundOn, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '24px',
         color: '#4A148C',
       })
       .setOrigin(0.5);
     muteBtn.on('pointerdown', () => {
+      const s = I18n.get().t();
       audio.setMuted(!audio.isMuted());
       save.updateSettings({ musicVolume: audio.isMuted() ? 0 : 0.5 });
-      muteText.setText(audio.isMuted() ? '🔇 Sound: OFF' : '🔊 Sound: ON');
+      muteText.setText(audio.isMuted() ? s.settings.soundOff : s.settings.soundOn);
     });
 
     const resetBtn = this.add
-      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50, 'ui_button')
+      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90, 'ui_button')
       .setInteractive({ useHandCursor: true });
     const resetText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50, '🗑  Reset Progress', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90, st.settings.resetProgress, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '22px',
         color: '#B71C1C',
@@ -203,28 +223,29 @@ export class MenuScene extends Phaser.Scene {
       .setOrigin(0.5);
     let resetConfirm = false;
     resetBtn.on('pointerdown', () => {
+      const s = I18n.get().t();
       if (!resetConfirm) {
-        resetText.setText('Click again to confirm');
+        resetText.setText(s.settings.confirmReset);
         resetConfirm = true;
       } else {
         save.resetProgress();
-        resetText.setText('✓ Progress reset');
+        resetText.setText(s.settings.progressReset);
         resetConfirm = false;
       }
     });
 
     const closeBtn = this.add
-      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 130, 'ui_button')
+      .image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 170, 'ui_button')
       .setInteractive({ useHandCursor: true });
     const closeText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 130, 'Close', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 170, st.settings.close, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '24px',
         color: '#4A148C',
       })
       .setOrigin(0.5);
     closeBtn.on('pointerdown', () => {
-      [overlay, panel, title, muteBtn, muteText, resetBtn, resetText, closeBtn, closeText].forEach(
+      [overlay, panel, title, langBtn, langText, muteBtn, muteText, resetBtn, resetText, closeBtn, closeText].forEach(
         (o) => o.destroy(),
       );
     });

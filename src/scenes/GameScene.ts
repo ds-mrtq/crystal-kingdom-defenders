@@ -9,6 +9,7 @@ import type { Projectile } from '../entities/Projectile';
 import { WaveManager } from '../systems/WaveManager';
 import { AbilityManager } from '../systems/AbilityManager';
 import { AudioSystem } from '../audio/AudioSystem';
+import { I18n } from '../i18n/I18n';
 
 interface GameSceneData {
   levelId: number;
@@ -552,7 +553,7 @@ export class GameScene extends Phaser.Scene {
     startG.strokeRoundedRect(start.x - 30, start.y - 50, 60, 30, 6);
     startG.setDepth(15);
     this.add
-      .text(start.x, start.y - 35, 'START', {
+      .text(start.x, start.y - 35, I18n.get().t().game.start, {
         fontFamily: 'Press Start 2P, monospace',
         fontSize: '10px',
         color: '#FFFFFF',
