@@ -40,9 +40,9 @@ export class UIScene extends Phaser.Scene {
     this.add.image(0, 0, 'ui_hud_strip').setOrigin(0).setDepth(100);
 
     // Coin
-    this.add.image(28, 28, 'ui_coin').setDepth(101);
+    this.add.image(22, 28, 'ui_coin').setDepth(101);
     this.goldText = this.add
-      .text(48, 28, '0', {
+      .text(46, 28, '0', {
         fontFamily: 'Press Start 2P, monospace',
         fontSize: '20px',
         color: '#FBC02D',
@@ -53,9 +53,9 @@ export class UIScene extends Phaser.Scene {
       .setDepth(101);
 
     // Lives
-    this.add.image(180, 28, 'ui_heart').setDepth(101);
+    this.add.image(130, 28, 'ui_heart').setDepth(101);
     this.livesText = this.add
-      .text(202, 28, '0', {
+      .text(156, 28, '0', {
         fontFamily: 'Press Start 2P, monospace',
         fontSize: '20px',
         color: '#E53935',
@@ -66,9 +66,9 @@ export class UIScene extends Phaser.Scene {
       .setDepth(101);
 
     // Wave
-    this.add.image(320, 28, 'ui_wave').setDepth(101);
+    this.add.image(240, 28, 'ui_wave').setDepth(101);
     this.waveText = this.add
-      .text(346, 28, `${I18n.get().t().ui.wave} 0/0`, {
+      .text(266, 28, `${I18n.get().t().ui.wave} 0/0`, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '22px',
         color: '#4A148C',
@@ -166,9 +166,9 @@ export class UIScene extends Phaser.Scene {
     // Meteor button
     this.meteorBtn = this.add.container(GAME_WIDTH - 200, barY + 28).setDepth(101);
     const mBg = this.add.image(0, 0, 'ui_button').setScale(0.7, 0.7);
-    const mIcon = this.add.image(-32, 0, 'ui_meteor').setScale(0.7);
+    const mIcon = this.add.image(-40, 0, 'ui_meteor').setScale(0.7);
     const mLabel = this.add
-      .text(8, 0, I18n.get().t().ui.meteor, {
+      .text(12, 0, I18n.get().t().ui.meteor, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '18px',
         color: '#4A148C',
@@ -191,9 +191,9 @@ export class UIScene extends Phaser.Scene {
     // Heal button
     this.healBtn = this.add.container(GAME_WIDTH - 60, barY + 28).setDepth(101);
     const hBg = this.add.image(0, 0, 'ui_button').setScale(0.5, 0.7);
-    const hIcon = this.add.image(-22, 0, 'ui_heal').setScale(0.7);
+    const hIcon = this.add.image(-28, 0, 'ui_heal').setScale(0.7);
     const hLabel = this.add
-      .text(12, 0, I18n.get().t().ui.heal, {
+      .text(14, 0, I18n.get().t().ui.heal, {
         fontFamily: 'Fredoka, sans-serif',
         fontSize: '16px',
         color: '#4A148C',
