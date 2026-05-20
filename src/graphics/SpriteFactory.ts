@@ -105,25 +105,35 @@ export class SpriteFactory {
     ctx.ellipse(cx, 12, 30, 16, 0, Math.PI, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // side tails
+    // side tails (each drawn separately to avoid connecting line)
     ctx.beginPath();
     ctx.ellipse(cx - 36, 48, 10, 22, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
     ctx.ellipse(cx + 36, 48, 10, 22, 0.3, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // tiara crown
+    // tiara crown (3-point crown with base band)
     ctx.fillStyle = hexStr(COLORS.goldYellow);
-    ctx.beginPath();
-    ctx.moveTo(cx - 14, 12);
-    ctx.lineTo(cx - 7, 4);
-    ctx.lineTo(cx, 12);
-    ctx.lineTo(cx + 7, 4);
-    ctx.lineTo(cx + 14, 12);
-    ctx.closePath();
-    ctx.fill();
     ctx.strokeStyle = hexStr(COLORS.charcoal);
     ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 16, 14);
+    ctx.lineTo(cx - 12, 2);
+    ctx.lineTo(cx - 5, 10);
+    ctx.lineTo(cx, -1);
+    ctx.lineTo(cx + 5, 10);
+    ctx.lineTo(cx + 12, 2);
+    ctx.lineTo(cx + 16, 14);
+    ctx.closePath();
+    ctx.fill();
     ctx.stroke();
+    // jewel on center point
+    ctx.fillStyle = hexStr(0x81d4fa);
+    ctx.beginPath();
+    ctx.arc(cx, 2, 2, 0, Math.PI * 2);
+    ctx.fill();
 
     SpriteFactory.registerCanvas(scene, 'princess', canvas);
   }
