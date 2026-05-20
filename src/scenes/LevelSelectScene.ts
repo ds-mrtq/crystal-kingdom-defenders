@@ -154,7 +154,7 @@ export class LevelSelectScene extends Phaser.Scene {
       node.setInteractive({ useHandCursor: unlocked });
 
       const label = this.add
-        .text(pos.x, pos.y - 56, lvl.name, {
+        .text(pos.x, pos.y - 56, I18n.get().level(lvl.id).name, {
           fontFamily: 'Fredoka, sans-serif',
           fontSize: '16px',
           color: '#4A148C',
